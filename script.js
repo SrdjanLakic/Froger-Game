@@ -134,7 +134,7 @@ function lose() {
     squares[currentIndex].classList.contains('l5') ||
     currentTime === 0
   ) {
-    resultDisplay.textContent = 'You LOSE';
+    resultDisplay.textContent = 'You LOSE ⛔';
     clearInterval(timer);
     squares[currentIndex].classList.remove('frog');
     document.removeEventListener('keyup', moveFrog);
@@ -147,5 +147,17 @@ function win() {
     document.removeEventListener('keyup', moveFrog);
   }
 }
+
+startPauseButton.addEventListener('click', () => {
+  console.log('timer', timer);
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+    document.removeEventListener('keyup', moveFrog);
+  } else {
+    timer = setInterval(autoMoveElements, 1000);
+    document.addEventListener('keyup', moveFrog);
+  }
+});
 
 timer = setInterval(autoMoveElements, 1000);
