@@ -11,6 +11,7 @@ const carsRight = document.querySelectorAll('.car-right');
 let currentIndex = 76;
 const width = 9;
 let timer;
+let outcomeTimer;
 let currentTime = 10;
 
 function moveFrog(e) {
@@ -33,8 +34,6 @@ function moveFrog(e) {
   squares[currentIndex].classList.add('frog');
 }
 
-document.addEventListener('keyup', moveFrog);
-
 function autoMoveElements() {
   currentTime--;
   timeLeftDisplay.textContent = currentTime;
@@ -42,6 +41,9 @@ function autoMoveElements() {
   logsRight.forEach((logRight) => moveLogRight(logRight));
   carsLeft.forEach((carLeft) => moveCarLeft(carLeft));
   carsRight.forEach((carRight) => moveCarRight(carRight));
+}
+
+function winOrLose() {
   lose();
   win();
 }
@@ -136,6 +138,7 @@ function lose() {
   ) {
     resultDisplay.textContent = 'You LOSE ⛔';
     clearInterval(timer);
+    clearInterval(outcomeTimer);
     squares[currentIndex].classList.remove('frog');
     document.removeEventListener('keyup', moveFrog);
   }
@@ -144,20 +147,21 @@ function win() {
   if (squares[currentIndex].classList.contains('ending-block')) {
     resultDisplay.textContent = 'You WIN 🏆';
     clearInterval(timer);
+    clearInterval(outcomeTimer);
     document.removeEventListener('keyup', moveFrog);
   }
 }
 
 startPauseButton.addEventListener('click', () => {
-  console.log('timer', timer);
   if (timer) {
     clearInterval(timer);
+    clearInterval(outcomeTimer);
+    outcomeTimer = null;
     timer = null;
     document.removeEventListener('keyup', moveFrog);
   } else {
     timer = setInterval(autoMoveElements, 1000);
+    outcomeTimer = setInterval(winOrLose, 50);
     document.addEventListener('keyup', moveFrog);
   }
 });
-
-timer = setInterval(autoMoveElements, 1000);
